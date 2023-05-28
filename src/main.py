@@ -28,12 +28,14 @@ if __name__ == '__main__':
         lambda args: solve_euler(args, corrected=False),
         lambda args: solve_euler(args, corrected=True),
         lambda args: solve_runge_kutta_4(args),
-        lambda args: solve_milne(args, solve_runge_kutta_4),
+        lambda args: solve_milne(args, lambda args: solve_runge_kutta_4(args, runge=True)),
     ]
 
-    print_table = TabulatePrinter(
-        tablefmt='simple_grid'
-    )
+    print_table = lambda x: None
+
+    # print_table = TabulatePrinter(
+    #     tablefmt='simple_grid'
+    # )
 
     print(
         f'=== Welcome to differential eqsolver ===',
@@ -58,13 +60,26 @@ if __name__ == '__main__':
     y_0 = float(input('Enter y_0: '))
     x_n = float(input('Enter x_n: '))
     h = float(input('Enter h: '))
+    eps = float(input('Enter eps: '))
+    print()
+    print('Input parameters: ')
+    print(f'> x_0 = {x_0}')
+    print(f'> y_0 = {y_0}')
+    print(f'> x_n = {x_n}')
+    print(f'> h   = {h}')
+    print(f'> eps = {eps}')
+    print()
     print('Enjoy results!')
     print()
 
-    args = Input(eq.f, Point(x_0, y_0), x_n, h)  # type: ignore
+    args = Input(eq.f, Point(x_0, y_0), x_n, h, eps)  # type: ignore
 
     for name, method in zip(method_names, methods):
         out = method(args)
         print(f'=== Report of {name} === ')
         print_table(out.table)
+        print()
+        print(f"Result of {name} is {out.points[-1].y}")
+        print(f"Total iterations: {len(out.points)}")
+        print(f"Stop at: {out.points[-1].x}")
         print()

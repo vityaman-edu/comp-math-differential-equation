@@ -1,5 +1,7 @@
+from typing import Tuple
 from diffeq.core import Point
 from diffeq.report.table import Table
+from diffeq.method.runge import runge_rule
 from diffeq.method.core import (
     MethodInput as Input,
     MethodOutput as Output,
@@ -20,16 +22,14 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
     методом Рунге-Кутта).
     '''
 
-    f, (x_0, y_0), x_n, h = input.validated
+    f, (x_0, y_0), x_n, h, eps = input.validated
+
+    p = 4 # Порядок точности
 
     # Compute first 3 points
-    (points, _) = one_step(Input(f, Point(x_0, y_0), x_0 + 2 * h, h))
+    (points, _) = one_step(Input(f, Point(x_0, y_0), x_0 + 3 * h, h, eps))
 
-    x = list(map(lambda p: p.x, points))
-    y = y_predict = list(map(lambda p: p.y, points))
-    y_correct = list(map(lambda p: p.y, points))
-    f_predict = [f(x, y) for x, y in zip(x, y)]
-    while x[-1] <= x_n:
+    def next(h: float) -> Tuple[float, float, float, float]:
         x_i = x[-1] + h
         y_i_predict = y[-4] + 4 / 3 * h * (
             + 2 * f(x[-3], y[-3])
@@ -42,6 +42,20 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
             + 4 * f(x[-1], y[-1])
             + f_i_predict
         )
+        return (x_i, y_i_predict, f_i_predict, y_i_correct)
+
+    x = list(map(lambda p: p.x, points))
+    y = y_predict = list(map(lambda p: p.y, points))
+    y_correct = list(map(lambda p: p.y, points))
+    f_predict = [f(x, y) for x, y in zip(x, y)]
+    while abs(x[-1] - x_n) >= h / 2:
+        x_i, y_i_predict, f_i_predict, y_i_correct = next(h)
+        _, _, _, y_i_correct_half = next(h / 2)
+
+        if not runge_rule(y_i_correct, y_i_correct_half, p, eps):
+            h /= 2
+            continue
+
         y_predict += [y_i_predict]
         y_correct += [y_i_correct]
         f_predict += [f_i_predict]

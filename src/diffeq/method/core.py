@@ -8,11 +8,13 @@ class MethodInput(NamedTuple):
     start: Point
     x_limit: float
     step: float
+    eps: float
 
     @property
     def validated(self) -> 'MethodInput':
-        assert self.step > 0
+        assert 0 < self.step
         assert self.start.x < self.x_limit
+        assert 0 < self.eps
         return self
 
 
