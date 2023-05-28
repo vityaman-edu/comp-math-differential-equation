@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+from math import *
 from typing import List
 from core import *
 from diffeq.core import Point
@@ -9,8 +11,20 @@ from diffeq.report.table import TabulatePrinter
 
 
 if __name__ == '__main__':
+    results = [
+        None,
+        lambda x: 2 * exp(-2 * x),
+        lambda x: log(exp(x ** 2) + 1),
+    ]
     equations = [
         ('y + (1 + x) * y ^ 2', lambda x, y: y + (1 + x) * y ** 2),
+
+        # C * exp(-2 * x), 0 2 4
+        ('-2 * y', lambda x, y: -2 * y),
+
+        # y = ln(exp(x ** 2) + 1),
+        ('2 * x * exp(x ** 2) / (exp(x ** 2) + 1)', lambda x,
+         y: 2 * x * exp(x ** 2) / (exp(x ** 2) + 1)),
     ]
     equations = list(map(
         lambda args: FirstOrderEquation(Function2(*args)),  # type: ignore
@@ -28,10 +42,11 @@ if __name__ == '__main__':
         lambda args: solve_euler(args, corrected=False),
         lambda args: solve_euler(args, corrected=True),
         lambda args: solve_runge_kutta_4(args),
-        lambda args: solve_milne(args, lambda args: solve_runge_kutta_4(args, runge=True)),
+        lambda args: solve_milne(
+            args, lambda args: solve_runge_kutta_4(args, runge=True)),
     ]
 
-    print_table = lambda x: None
+    def print_table(x): return None
 
     # print_table = TabulatePrinter(
     #     tablefmt='simple_grid'
@@ -83,3 +98,10 @@ if __name__ == '__main__':
         print(f"Total iterations: {len(out.points)}")
         print(f"Stop at: {out.points[-1].x}")
         print()
+
+        if name == method_names[2]:
+            x = list(map(lambda p: p.x, out.points))
+            y = list(map(lambda p: p.y, out.points))
+            if eq_index != 0:
+                plt.plot(x, y, x, list(map(results[eq_index], x)))
+                plt.show()
