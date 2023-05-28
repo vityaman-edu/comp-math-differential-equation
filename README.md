@@ -5,7 +5,7 @@
 Variant: 16 (1, 3, 5).
 
 - Одношаговый Метод Эйлера
-- Одношаговый Метод Рунге-Кутта 4- го порядка
+- Одношаговый Метод Рунге-Кутта 4-го порядка
 - Многошаговый Метод Милна
 
 ## Build & Run
@@ -15,6 +15,7 @@ Variant: 16 (1, 3, 5).
 ```bash
 python3 -m pip install mypy
 python3 -m pip install tabulate
+python3 -m pip install types-tabulate
 ```
 
 ```bash
