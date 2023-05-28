@@ -31,6 +31,10 @@ if __name__ == '__main__':
         lambda args: solve_milne(args, solve_runge_kutta_4),
     ]
 
+    print_table = TabulatePrinter(
+        tablefmt='simple_grid'
+    )
+
     print(
         f'=== Welcome to differential eqsolver ===',
         f'',
@@ -43,8 +47,8 @@ if __name__ == '__main__':
         sep='\n'
     )
 
-    eq_index = int(
-        input(f'Enter a number of equation i in [0..{len(equations) - 1}]: '))
+    propmt = f'Enter a number of equation i in [0..{len(equations) - 1}]: '
+    eq_index = int(input(propmt))
     eq = equations[eq_index]
 
     print(f'Taken: {eq}')
@@ -57,11 +61,7 @@ if __name__ == '__main__':
     print('Enjoy results!')
     print()
 
-    args = Input(eq.f, Point(x_0, y_0), x_n, h) # type: ignore
-
-    print_table = TabulatePrinter(
-        tablefmt='simple_grid'
-    )
+    args = Input(eq.f, Point(x_0, y_0), x_n, h)  # type: ignore
 
     for name, method in zip(method_names, methods):
         out = method(args)
