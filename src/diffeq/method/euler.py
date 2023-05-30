@@ -36,7 +36,6 @@ def solve(input: Input, corrected: bool = True) -> Output:
     while abs(x[-1] - x_n) >= h / 2:
         x_i, y_i = next(h)
 
-
         x_i_half, y_i_half = next(h / 2)
         x += [x_i_half]; y += [y_i_half]
         x_i_half, y_i_half = next(h / 2)
