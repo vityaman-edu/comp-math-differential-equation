@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     args = Input(eq.f, Point(x_0, y_0), x_n, h, eps)  # type: ignore
 
-    for i in range(0, 1):
+    for i in range(0, 4):
         name, method = method_names[i], methods[i]
         out = method(args)
         print(f'=== Report of {name} === ')

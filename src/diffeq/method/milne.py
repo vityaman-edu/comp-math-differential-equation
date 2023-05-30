@@ -42,6 +42,14 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
             + 4 * f(x[-1], y[-1])
             + f_i_predict
         )
+        while abs(y_i_predict - y_i_correct) > eps:
+            y_i_predict = y_i_correct
+            f_i_predict = f(x_i, y_i_predict)
+            y_i_correct = y[-2] + h / 3 * (
+                + f(x[-2], y[-2])
+                + 4 * f(x[-1], y[-1])
+                + f_i_predict
+            )   
         return (x_i, y_i_predict, f_i_predict, y_i_correct)
 
     x = list(map(lambda p: p.x, points))
@@ -50,12 +58,7 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
     f_predict = [f(x, y) for x, y in zip(x, y)]
     while abs(x[-1] - x_n) >= h / 2:
         x_i, y_i_predict, f_i_predict, y_i_correct = next(h)
-        _, _, _, y_i_correct_half = next(h / 2)
-
-        if not runge_rule(y_i_correct, y_i_correct_half, p, eps):
-            h /= 2
-            continue
-
+        
         y_predict += [y_i_predict]
         y_correct += [y_i_correct]
         f_predict += [f_i_predict]

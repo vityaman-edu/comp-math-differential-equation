@@ -46,11 +46,25 @@ def solve(input: Input, runge=True) -> Output:
 
         x_i, y_i = next(h)
 
-        if runge:
-            _, y_i_half = next(h / 2)
-            if not runge_rule(y_i, y_i_half, p, eps):
-                h /= 2
-                continue
+        x_i_half, y_i_half = next(h / 2)
+        y += [y_i_half]
+        x += [x_i_half]
+        k1 += [k_1(x[-1], y[-1])]
+        k2 += [k_2(x[-1], y[-1])]
+        k3 += [k_3(x[-1], y[-1])]
+        k4 += [k_4(x[-1], y[-1])]
+        x_i_half, y_i_half = next(h / 2)
+        y.pop()
+        x.pop()
+        k1.pop()
+        k2.pop()
+        k3.pop()
+        k4.pop()
+
+
+        if not runge_rule(y_i, y_i_half, p, eps):
+            h /= 2
+            continue
 
         y += [y_i]
         x += [x_i]
@@ -59,7 +73,7 @@ def solve(input: Input, runge=True) -> Output:
     k2 += [k_2(x[-1], y[-1])]
     k3 += [k_3(x[-1], y[-1])]
     k4 += [k_4(x[-1], y[-1])]
-    
+
     return Output(
         list(map(lambda t: Point(*t), zip(x, y))),  # type: ignore
         Table(
