@@ -29,7 +29,7 @@ class MethodOutput(NamedTuple):
         x = list(map(lambda p: p.x, self.points))
         def at(arg: float) -> float:
             i = bisect_left(x, arg) - 1
-            if i == len(x) - 2:
+            if i == len(x) - 1:
                 return self.points[i + 1].y
             line = Line.between(self.points[i], self.points[i + 1])
             return line(arg)
