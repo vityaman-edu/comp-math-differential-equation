@@ -49,7 +49,7 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
                 + f(x[-2], y[-2])
                 + 4 * f(x[-1], y[-1])
                 + f_i_predict
-            )   
+            )
         return (x_i, y_i_predict, f_i_predict, y_i_correct)
 
     x = list(map(lambda p: p.x, points))

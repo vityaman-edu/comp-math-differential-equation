@@ -14,6 +14,8 @@ if __name__ == '__main__':
         None,
         lambda x: 2 * exp(-2 * x),
         lambda x: log(exp(x ** 2) + 1),
+        None,
+        None,
     ]
     equations = [
         ('y + (1 + x) * y ^ 2', lambda x, y: y + (1 + x) * y ** 2),
@@ -24,6 +26,10 @@ if __name__ == '__main__':
         # y = ln(exp(x ** 2) + 1),
         ('2 * x * exp(x ** 2) / (exp(x ** 2) + 1)', 
          lambda x, y: 2 * x * exp(x ** 2) / (exp(x ** 2) + 1)),
+
+        ('x * y', lambda x, y: x * y), 
+
+        ('x * x - 2 * y', lambda x, y: x * x - 2 * y),
     ]
     equations = list(map(
         lambda args: FirstOrderEquation(Function2(*args)),  # type: ignore
@@ -91,7 +97,9 @@ if __name__ == '__main__':
 
     for i in range(0, 4):
         name, method = method_names[i], methods[i]
+
         out = method(args)
+
         print(f'=== Report of {name} === ')
         print_table(out.table)
         print()
@@ -107,7 +115,8 @@ if __name__ == '__main__':
         plt.plot(x, list(map(f, x)), label = f'{name}')
 
         if r is not None:
-            print('Diffrence (epsilon) is', max(map(
+            print(r(x[-1]) - f(x[-1]))
+            print('Difference (epsilon) is', max(map(
                 lambda t: abs(t[0] - t[1]), 
                 zip(map(r, x), map(f, x))
             )))
