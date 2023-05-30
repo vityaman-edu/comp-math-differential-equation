@@ -16,10 +16,7 @@ Variant: 16 (1, 3, 5).
 python3 -m pip install mypy
 python3 -m pip install tabulate
 python3 -m pip install types-tabulate
-```
-
-```bash
-
+python3 -m pip install matplotlib
 ```
 
 ## Reference

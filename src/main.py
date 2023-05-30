@@ -2,13 +2,12 @@ import matplotlib.pyplot as plt
 from math import *
 from typing import List
 from core import *
-from diffeq.core import Point
+from diffeq.core import Point, partition
 from diffeq.method.euler import solve as solve_euler
 from diffeq.method.runge_kutta_4 import solve as solve_runge_kutta_4
 from diffeq.method.milne import solve as solve_milne
 from diffeq.method.core import MethodInput as Input, OneStepMethod
 from diffeq.report.table import TabulatePrinter
-
 
 if __name__ == '__main__':
     results = [
@@ -23,8 +22,8 @@ if __name__ == '__main__':
         ('-2 * y', lambda x, y: -2 * y),
 
         # y = ln(exp(x ** 2) + 1),
-        ('2 * x * exp(x ** 2) / (exp(x ** 2) + 1)', lambda x,
-         y: 2 * x * exp(x ** 2) / (exp(x ** 2) + 1)),
+        ('2 * x * exp(x ** 2) / (exp(x ** 2) + 1)', 
+         lambda x, y: 2 * x * exp(x ** 2) / (exp(x ** 2) + 1)),
     ]
     equations = list(map(
         lambda args: FirstOrderEquation(Function2(*args)),  # type: ignore
@@ -46,12 +45,6 @@ if __name__ == '__main__':
             args, lambda args: solve_runge_kutta_4(args, runge=True)),
     ]
 
-    def print_table(x): return None
-
-    # print_table = TabulatePrinter(
-    #     tablefmt='simple_grid'
-    # )
-
     print(
         f'=== Welcome to differential eqsolver ===',
         f'',
@@ -63,6 +56,13 @@ if __name__ == '__main__':
                   enumerate(map(str, equations)))),
         sep='\n'
     )
+
+    if input("Print Table: ").lower() != 'yes':
+        def print_table(x): return None
+    else:
+        print_table = TabulatePrinter(
+            tablefmt='simple_grid'
+        )
 
     propmt = f'Enter a number of equation i in [0..{len(equations) - 1}]: '
     eq_index = int(input(propmt))
@@ -96,12 +96,25 @@ if __name__ == '__main__':
         print()
         print(f"Result of {name} is {out.points[-1].y}")
         print(f"Total iterations: {len(out.points)}")
+        print(f"h = {out.h}")
         print(f"Stop at: {out.points[-1].x}")
         print()
 
-        if name == method_names[2]:
-            x = list(map(lambda p: p.x, out.points))
-            y = list(map(lambda p: p.y, out.points))
-            if eq_index != 0:
-                plt.plot(x, y, x, list(map(results[eq_index], x)))
-                plt.show()
+        f, r = out.f, results[eq_index]
+        x = list(partition(out.points[0].x, out.points[-1].x, 0.0001))
+
+        plt.plot(x, list(map(f, x)), label = f'{name}')
+
+        if r is not None:
+            print('Diffrence (epsilon) is', max(map(
+                lambda t: abs(t[0] - t[1]), 
+                zip(map(r, x), map(f, x))
+            )))
+
+    r = results[eq_index]
+    x = list(partition(out.points[0].x, out.points[-1].x, 0.0001))
+    if r is not None:
+        plt.plot(x, list(map(r, x)), label = f'Precise')
+
+    plt.legend()
+    plt.show()

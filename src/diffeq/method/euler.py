@@ -54,4 +54,5 @@ def solve(input: Input, corrected: bool = True) -> Output:
             ['i', 'x', 'y'],
             list(zip(range(len(x)), x, y)),
         ),
+        h = h
     )

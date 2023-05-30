@@ -27,7 +27,7 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
     p = 4 # Порядок точности
 
     # Compute first 3 points
-    (points, _) = one_step(Input(f, Point(x_0, y_0), x_0 + 3 * h, h, eps))
+    (points, _, h) = one_step(Input(f, Point(x_0, y_0), x_0 + 3 * h, h, eps))
 
     def next(h: float) -> Tuple[float, float, float, float]:
         x_i = x[-1] + h
@@ -73,4 +73,5 @@ def solve(input: Input, one_step: OneStepMethod) -> Output:
                 f_predict,
             )),
         ),
+        h = h
     )

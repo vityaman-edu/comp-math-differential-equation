@@ -60,5 +60,6 @@ def solve(input: Input, runge=True) -> Output:
         Table(
             ['i', 'x', 'y', 'k1', 'k2', 'k3', 'k4'],
             list(zip(range(len(x)), x, y, k1, k2, k3, k4))
-        )
+        ),
+        h = h
     )
