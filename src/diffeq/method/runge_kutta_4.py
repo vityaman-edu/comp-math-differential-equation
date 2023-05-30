@@ -54,7 +54,12 @@ def solve(input: Input, runge=True) -> Output:
 
         y += [y_i]
         x += [x_i]
-
+        
+    k1 += [k_1(x[-1], y[-1])]
+    k2 += [k_2(x[-1], y[-1])]
+    k3 += [k_3(x[-1], y[-1])]
+    k4 += [k_4(x[-1], y[-1])]
+    
     return Output(
         list(map(lambda t: Point(*t), zip(x, y))),  # type: ignore
         Table(

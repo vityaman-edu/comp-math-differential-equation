@@ -1,0 +1,60 @@
+=== Welcome to differential eqsolver ===
+
+Here you can solve differential equations using:
+- Basic Euler
+- Corrected Euler
+- Runge-Kutta 4
+- Milne
+
+Choice a one of first-order equations:
+[0]: dy/dx = y + (1 + x) * y ^ 2
+[1]: dy/dx = -2 * y
+[2]: dy/dx = 2 * x * exp(x ** 2) / (exp(x ** 2) + 1)
+Print Table: Enter a number of equation i in [0..2]: Taken: dy/dx = 2 * x * exp(x ** 2) / (exp(x ** 2) + 1)
+Enter boundaties: 
+Enter x_0: Enter y_0: Enter x_n: Enter h: Enter eps: 
+Input parameters: 
+> x_0 = 0.0
+> y_0 = 0.69314718056
+> x_n = 4.0
+> h   = 0.5
+> eps = 0.01
+
+Enjoy results!
+
+=== Report of Basic Euler === 
+
+Result of Basic Euler is 15.84804333847564
+Total iterations: 1115
+h = 0.001953125
+Stop at: 4.0
+
+Difference (epsilon) is 0.1468094993494944
+
+=== Report of Corrected Euler === 
+
+Result of Corrected Euler is 16.00088138504016
+Total iterations: 355
+h = 0.00390625
+Stop at: 4.0
+
+Difference (epsilon) is 0.008274292481036172
+
+=== Report of Runge-Kutta 4 === 
+
+Result of Runge-Kutta 4 is 15.999985515979478
+Total iterations: 74
+h = 0.03125
+Stop at: 4.0
+
+Difference (epsilon) is 0.034681626215779526
+
+=== Report of Milne === 
+
+Result of Milne is 15.770724773148173
+Total iterations: 140
+h = 0.015625
+Stop at: 4.0
+
+Difference (epsilon) is 0.36422453762333573
+
